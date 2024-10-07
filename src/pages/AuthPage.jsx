@@ -5,10 +5,10 @@ import {
   signInWithEmailAndPassword,
   signInWithPopup,
 } from "firebase/auth";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Button, Col, Form, Image, Modal, Row } from "react-bootstrap";
-import { AuthContext } from "../components/AuthProvider";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../components/AuthProvider";
 
 export default function AuthPage() {
   const loginImage = "https://sig1.co/img-twitter-1";
@@ -18,12 +18,14 @@ export default function AuthPage() {
   const handleShowLogin = () => setModalShow("login");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const auth = getAuth();
   const navigate = useNavigate();
+  const auth = getAuth();
   const { currentUser } = useContext(AuthContext);
   const provider = new GoogleAuthProvider();
 
-  if (currentUser) navigate("/profile");
+  useEffect(() => {
+    if (currentUser) navigate("/profile");
+  }, [currentUser, navigate]);
 
   const handleSignUp = async (e) => {
     e.preventDefault();
@@ -41,15 +43,18 @@ export default function AuthPage() {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      await signInWithEmailAndPassword(auth, username, password);
+      const res = await signInWithEmailAndPassword(auth, username, password);
+      console.log(res.user);
     } catch (error) {
       console.error(error);
     }
   };
-  const handleGoogleLogin = async (e) => {
+
+  const handlgeGoogleLogin = async (e) => {
     e.preventDefault();
     try {
-      await signInWithPopup(auth, provider);
+      const res = await signInWithPopup(auth, provider);
+      console.log(res.user);
     } catch (error) {
       console.error(error);
     }
@@ -78,7 +83,7 @@ export default function AuthPage() {
           <Button
             className="rounded-pill"
             variant="outline-dark"
-            onClick={handleGoogleLogin}
+            onClick={handlgeGoogleLogin}
           >
             <i className="bi bi-google"></i> Sign up with Google
           </Button>
