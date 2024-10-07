@@ -1,7 +1,5 @@
-import axios from "axios";
 import { useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
-import { jwtDecode } from "jwt-decode";
 import { useDispatch } from "react-redux";
 import { savePost } from "../features/posts/postSlice";
 
